@@ -12,7 +12,7 @@ object MongoDBconnect {
   def main(args: Array[String]): Unit = {
 
     // Replace the placeholder with your Atlas connection string
-    val connectionString = "mongodb+srv://luzihao:C7kkjpjq8EHC5Qcj@cluster0.mdmm4kj.mongodb.net/";
+    val connectionString = "mongodb+srv://hsyl:12345@final.dumyeta.mongodb.net/";
 
     // Construct a ServerApi instance using the ServerApi.builder() method
     val serverApi = ServerApi.builder.version(ServerApiVersion.V1).build()
@@ -26,9 +26,7 @@ object MongoDBconnect {
     // Create a new client and connect to the server
     Using(MongoClient(settings)) { mongoClient =>
       // Send a ping to confirm a successful connection
-      val database = mongoClient.getDatabase("sample")
-      val collectionHeart: MongoCollection[Document] = database.getCollection("sample.heart")
-      val collectionSS: MongoCollection[Document] = database.getCollection("sample.ss")
+      val database = mongoClient.getDatabase("admin")
       val ping = database.runCommand(Document("ping" -> 1)).head()
 
       Await.result(ping, 10.seconds)
