@@ -22,4 +22,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index())
 
   }
+  def about() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.about()) // Renders the about view
+  }
 }
