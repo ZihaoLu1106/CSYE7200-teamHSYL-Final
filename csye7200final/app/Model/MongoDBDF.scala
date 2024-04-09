@@ -1,5 +1,6 @@
 package Model
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.functions._
 import com.mongodb.spark._
 import org.bson.Document
 import org.mongodb.scala.{MongoClient, MongoCollection}
@@ -16,22 +17,32 @@ object MongoDBDF {
 
     val uri="mongodb+srv://luzihao:C7kkjpjq8EHC5Qcj@cluster0.mdmm4kj.mongodb.net/"
 
-    val dataFrameHeart = spark.read
+    val dfH = spark.read
       .format("mongodb")
       .option("database", "sample")
       .option("collection", "heart")
       .load()
 
-    dataFrameHeart.show()
-
-    val dataFramess = spark.read
+    val dfS = spark.read
       .format("mongodb")
       .option("database", "sample")
       .option("collection", "ss")
       .load()
+    dfS.show()
 
-    dataFramess.show()
-
+    // cleaning heart Analysis dataset
+    // removed unrelated columns to the project
+    val columnsToRemove = Seq("cp","caa", "oldpeak", "restecg","thall","thalachh","slp","output","fbs")
+    val dfHfinal = dfH.drop(columnsToRemove: _*)
+    val renameMap = Map("trtbps" -> "Blood Pressure",
+    "chol" -> "BMI Category", "age" -> "Age", "exng" -> "Physical Activity Level", "sex" -> "Gender")
+    var renamedDF = dfHfinal
+    for ((oldName, newName) <- renameMap) {
+      renamedDF = renamedDF.withColumnRenamed(oldName, newName)
+    }
+    val updatedDF = renamedDF.withColumn("BMI Category", when(col("BMI Category") <= 242, 0)
+      .when(col("BMI Category") > 242 && col("BMI Category") <= 418, 1)
+      .otherwise(2))
+    updatedDF.show(5)
   }
-
 }
