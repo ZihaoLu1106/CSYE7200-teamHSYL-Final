@@ -44,5 +44,71 @@ object MongoDBDF {
       .when(col("BMI Category") > 242 && col("BMI Category") <= 418, 1)
       .otherwise(2))
     updatedDF.show(5)
+
+
+    //cleaning ss dataset
+    def mapCategory(category: String): Int = category match {
+      case "Overweight" => 2
+      case "Normal" | "Normal Weight" => 1
+      case "Obese" => 0
+      case _ => -1 // Handle unknown categories if any
+    }
+
+    // Create a UDF (User Defined Function) to apply the mapping function to the DataFrame
+    val mapCategoryUDF = udf[Int, String](mapCategory)
+
+    // Update the values in the same column using the UDF
+    val updatedDFS = dfS.withColumn("BMI Category", mapCategoryUDF(col("BMI Category")))
+
+    val columnsToRemove1 = Seq("Daily Steps", "Heart Rate", "Occupation", "Person ID", "Sleep Disorder")
+    val dfSfinal = updatedDFS.drop(columnsToRemove1: _*)
+    //change the pattern of Blood Pressure
+    val newDF = dfSfinal.withColumn("Blood Pressure", split(col("Blood Pressure"), "/").getItem(0))
+    // Define a function to map gender to numeric values
+    def mapGender(gender: String): Int = gender match {
+      case "Male" => 0
+      case "Female" => 1
+      case _ => -1 // Handle unknown genders if any
+    }
+    // Create a UDF (User Defined Function) to apply the mapping function to the DataFrame
+    val mapGenderUDF = udf[Int, String](mapGender)
+
+    // Update the values in the "Gender" column using the UDF
+    val newDFCGender = newDF.withColumn("Gender", mapGenderUDF(col("Gender")))
+    val df1 = newDFCGender;
+
+    val addingPhysicalNumber = newDFCGender.agg(mean(col("Physical Activity Level"))).collect()(0)(0)
+
+    val df2 = updatedDF.withColumn("Physical Activity Level",
+      when(col("Physical Activity Level") === 0, 30)
+        .otherwise(col("Physical Activity Level").cast("int") + addingPhysicalNumber))
+
+
+    def appendDataFrames(df1: DataFrame, df2: DataFrame): DataFrame = {
+      // Add an identifier column to each dataframe to differentiate between them after merging
+      val df1WithID = df1.withColumn("source", lit("df1"))
+      val df2WithID = df2.withColumn("source", lit("df2"))
+
+      // Union the dataframes to append df2 to df1
+      val mergedDF = df1WithID.union(df2WithID)
+
+      // Drop the source column
+      mergedDF.drop("source")
+    }
+    val defaultQualityOfSleep = ""
+    val defaultSleepDuration = ""
+    val defaultStressLevel = ""
+
+    // Add new columns to df2 with default values
+    val df2WithNewColumns = df2.withColumn("Quality of Sleep", lit(defaultQualityOfSleep))
+      .withColumn("Sleep Duration", lit(defaultSleepDuration))
+      .withColumn("Stress Level", lit(defaultStressLevel))
+
+    // Show the dataframe with new columns
+    df2WithNewColumns.show()
+    //merged dataframe
+    val mergedDF = appendDataFrames(df1, df2WithNewColumns)
+    println("Here is the merged DataFrame: ")
+    mergedDF.show(10)
   }
 }
