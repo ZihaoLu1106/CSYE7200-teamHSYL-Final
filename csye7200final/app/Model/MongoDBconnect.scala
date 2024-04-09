@@ -1,6 +1,6 @@
 package Model
 import com.mongodb.{ServerApi, ServerApiVersion}
-import org.mongodb.scala.{ConnectionString, MongoClient, MongoClientSettings}
+import org.mongodb.scala.{ConnectionString, MongoClient, MongoClientSettings, MongoCollection}
 import org.mongodb.scala.bson.Document
 
 import scala.concurrent.Await
@@ -26,7 +26,9 @@ object MongoDBconnect {
     // Create a new client and connect to the server
     Using(MongoClient(settings)) { mongoClient =>
       // Send a ping to confirm a successful connection
-      val database = mongoClient.getDatabase("admin")
+      val database = mongoClient.getDatabase("sample")
+      val collectionHeart: MongoCollection[Document] = database.getCollection("sample.heart")
+      val collectionSS: MongoCollection[Document] = database.getCollection("sample.ss")
       val ping = database.runCommand(Document("ping" -> 1)).head()
 
       Await.result(ping, 10.seconds)
