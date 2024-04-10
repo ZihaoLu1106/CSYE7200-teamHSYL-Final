@@ -1,27 +1,35 @@
-@()
+@(data: List[CSVRow])
 
 @main("About") {
 <h1>This is team HSYL</h1>
 <table class="table">
     <thead>
     <tr>
-        <th>Name</th>
         <th>Age</th>
-        <th>Role</th>
+        <th>BMI Category</th>
+        <th>Blood Pressure</th>
+        <th>Gender</th>
+        <th>Physical Activity Level</th>
+        <th>Quality of Sleep</th>
+        <th>Sleep Duration</th>
+        <th>Stress Level</th>
+        <th>ID</th>
     </tr>
     </thead>
     <tbody>
+    @for(row <- data) {
     <tr>
-        <td>John Doe</td>
-        <td>30</td>
-        <td>Developer</td>
+        <td>@row.Age</td>
+        <td>@row.BMI_Category</td>
+        <td>@row.Blood_Pressure</td>
+        <td>@row.Genter</td>
+        <td>@row.PhysicalActivity_Level</td>
+        <td>@row.Quality_Of_Sleep</td>
+        <td>@row.Sleep_Duaration</td>
+        <td>@row.Stress_Level</td>
+        <td>@row.ID</td>
     </tr>
-    <tr>
-        <td>Jane Smith</td>
-        <td>25</td>
-        <td>Designer</td>
-    </tr>
-    <!-- Add more rows as needed -->
+    }
     </tbody>
 </table>
 }

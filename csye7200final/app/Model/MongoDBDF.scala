@@ -8,6 +8,9 @@ import org.mongodb.scala.bson.collection.immutable.Document
 
 object MongoDBDF {
   def main(args: Array[String]): Unit ={
+    getDF()
+  }
+  def getDF(): DataFrame ={
     val spark = SparkSession.builder()
       .master("local")
       .appName("MongoSparkConnectorIntro")
@@ -110,5 +113,16 @@ object MongoDBDF {
     val mergedDF = appendDataFrames(df1, df2WithNewColumns)
     println("Here is the merged DataFrame: ")
     mergedDF.show(10)
+
+    val outputPath = "app/data"
+    try {
+      mergedDF.write.csv(outputPath)
+      println(s"DataFrame exported to CSV successfully at: $outputPath")
+    } catch {
+      case e: Exception => println(s"Error occurred while exporting DataFrame: ${e.getMessage}")
+    }
+
+    mergedDF
+
   }
 }
