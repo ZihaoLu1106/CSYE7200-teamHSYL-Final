@@ -103,9 +103,9 @@ object MongoDBDF {
       // Drop the source column
       mergedDF.drop("source")
     }
-    val defaultQualityOfSleep = 0
-    val defaultSleepDuration = 0.0
-    val defaultStressLevel = 0
+    val defaultQualityOfSleep = df1.agg(mean(col("Quality of Sleep"))).collect()(0)(0).asInstanceOf[Double].toInt
+    val defaultSleepDuration = df1.agg(mean(col("Sleep Duration"))).collect()(0)(0)
+    val defaultStressLevel = df1.agg(mean(col("Stress Level"))).collect()(0)(0).asInstanceOf[Double].toInt
 
     // Add new columns to df2 with default values
     val df2WithNewColumns = df2.withColumn("Quality of Sleep", lit(defaultQualityOfSleep))
@@ -128,6 +128,5 @@ object MongoDBDF {
     }
 
     mergedDF
-
   }
 }
