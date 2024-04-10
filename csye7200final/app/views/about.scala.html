@@ -2,6 +2,26 @@
 
 @main("About") {
 <h1>This is team HSYL</h1>
+<h2>Input Bars</h2>
+
+<form action="@routes.HomeController.processInputs()" method="POST">
+    <div>
+        <label for="input1">Input 1:</label>
+        <input type="text" id="input1" name="input1">
+    </div>
+
+    <div>
+        <label for="input2">Input 2:</label>
+        <input type="text" id="input2" name="input2">
+    </div>
+
+    <div>
+        <label for="input3">Input 3:</label>
+        <input type="text" id="input3" name="input3">
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
 <table class="table">
     <thead>
     <tr>

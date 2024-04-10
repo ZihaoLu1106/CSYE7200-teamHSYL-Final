@@ -38,6 +38,15 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     }
     Ok(views.html.about(data)) // Renders the about view
   }
+  def processInputs() = Action { implicit request: Request[AnyContent] =>
+    val input1 = request.body.asFormUrlEncoded.get("input1").head
+    val input2 = request.body.asFormUrlEncoded.get("input2").head
+    val input3 = request.body.asFormUrlEncoded.get("input3").head
+
+    // Do something with the input values
+    println(s"Input 1: $input1, Input 2: $input2, Input 3: $input3")
+    Ok(s"Input 1: $input1, Input 2: $input2, Input 3: $input3")
+  }
 }
 
 case class CSVRow(Age: Int, BMI_Category: Int, Blood_Pressure: Int,Genter:Double,PhysicalActivity_Level:Int,Quality_Of_Sleep:Int,Sleep_Duaration:Double,Stress_Level:Int,ID:String)
