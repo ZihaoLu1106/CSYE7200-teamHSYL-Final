@@ -98,14 +98,14 @@ object MongoDBDF {
       val df2WithID = df2.withColumn("source", lit("df2"))
 
       // Union the dataframes to append df2 to df1
-      val mergedDF = df1WithID.union(df2WithID)
+      val mergedDF = df1WithID.unionByName(df2WithID)
 
       // Drop the source column
       mergedDF.drop("source")
     }
-    val defaultQualityOfSleep = ""
-    val defaultSleepDuration = ""
-    val defaultStressLevel = ""
+    val defaultQualityOfSleep = 0
+    val defaultSleepDuration = 0.0
+    val defaultStressLevel = 0
 
     // Add new columns to df2 with default values
     val df2WithNewColumns = df2.withColumn("Quality of Sleep", lit(defaultQualityOfSleep))
@@ -117,11 +117,11 @@ object MongoDBDF {
     //merged dataframe
     val mergedDF = appendDataFrames(df1, df2WithNewColumns)
     println("Here is the merged DataFrame: ")
-    mergedDF.show(10)
+    mergedDF.show(400)
 
     val outputPath = "app/data"
     try {
-      mergedDF.write.csv(outputPath)
+      mergedDF.coalesce(1).write.csv(outputPath)
       println(s"DataFrame exported to CSV successfully at: $outputPath")
     } catch {
       case e: Exception => println(s"Error occurred while exporting DataFrame: ${e.getMessage}")
@@ -130,32 +130,4 @@ object MongoDBDF {
     mergedDF
 
   }
-
-
-  // create feature engineering
-  // 我先打target_column 看要抓哪列
-  val featureColumns = mergedDF.columns.filter(_ != "target_column")
-  val assembler = new VectorAssembler()
-      .setInputCols(featureColumns)
-      .setOutputCol("features")
-
-  // 1. RandomForestRegressor
-  val rf = new RandomForestRegressor()
-      .setLabelCol("target_column")
-      .setFeaturesCol("features")
-
-  val pipeline = new Pipeline().setStages(Array(assembler, rf))
-
-  val Array(trainingData, testData) = mergedDF.randomSplit(Array(0.7, 0.3), seed = 1234)
-
-  // traing model
-  val model = pipeline.fit(trainingData)
-  val predictions = model.transform(testData)
-
-  val evaluator = new RegressionEvaluator()
-      .setLabelCol("target_column")
-      .setPredictionCol("prediction")
-      .setMetricName("rmse")
-  val rmse = evaluator.evaluate(predictions)
-  println(s"Root Mean Squared Error (RMSE) on test data = $rmse")
 }
