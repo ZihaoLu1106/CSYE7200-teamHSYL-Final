@@ -31,7 +31,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val data = try {
       source.getLines().drop(1).map { line =>
         val Array(age, bmiCategory, bloodPressure, gender, physicalActivityLevel, qualityOfSleep, sleepDuration, stressLevel, id) = line.split(",").map(_.trim)
-        CSVRow(age.toInt, bmiCategory.toInt, bloodPressure.toInt, gender.toDouble, physicalActivityLevel.toInt, qualityOfSleep.toInt, sleepDuration.toDouble, stressLevel.toInt, id)
+        CSVRow(age.toInt, bmiCategory.toInt, bloodPressure.toInt, gender.toDouble, physicalActivityLevel.toDouble, qualityOfSleep.toInt, sleepDuration.toDouble, stressLevel.toInt, id)
       }.toList
     } finally {
       source.close()
@@ -49,4 +49,4 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 }
 
-case class CSVRow(Age: Int, BMI_Category: Int, Blood_Pressure: Int,Genter:Double,PhysicalActivity_Level:Int,Quality_Of_Sleep:Int,Sleep_Duaration:Double,Stress_Level:Int,ID:String)
+case class CSVRow(Age: Int, BMI_Category: Int, Blood_Pressure: Int,Genter:Double,PhysicalActivity_Level:Double,Quality_Of_Sleep:Int,Sleep_Duaration:Double,Stress_Level:Int,ID:String)
