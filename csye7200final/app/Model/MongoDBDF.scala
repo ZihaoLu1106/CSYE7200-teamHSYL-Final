@@ -6,6 +6,11 @@ import org.bson.Document
 import org.mongodb.scala.{MongoClient, MongoCollection}
 import org.mongodb.scala.bson.collection.immutable.Document
 
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.feature.{VectorAssembler}
+import org.apache.spark.ml.regression.{RandomForestRegressor}
+import org.apache.spark.ml.evaluation.RegressionEvaluator
+
 object MongoDBDF {
   def main(args: Array[String]): Unit ={
     getDF()
@@ -125,4 +130,32 @@ object MongoDBDF {
     mergedDF
 
   }
+
+
+  // create feature engineering
+  // 我先打target_column 看要抓哪列
+  val featureColumns = mergedDF.columns.filter(_ != "target_column")
+  val assembler = new VectorAssembler()
+      .setInputCols(featureColumns)
+      .setOutputCol("features")
+
+  // 1. RandomForestRegressor
+  val rf = new RandomForestRegressor()
+      .setLabelCol("target_column")
+      .setFeaturesCol("features")
+
+  val pipeline = new Pipeline().setStages(Array(assembler, rf))
+
+  val Array(trainingData, testData) = mergedDF.randomSplit(Array(0.7, 0.3), seed = 1234)
+
+  // traing model
+  val model = pipeline.fit(trainingData)
+  val predictions = model.transform(testData)
+
+  val evaluator = new RegressionEvaluator()
+      .setLabelCol("target_column")
+      .setPredictionCol("prediction")
+      .setMetricName("rmse")
+  val rmse = evaluator.evaluate(predictions)
+  println(s"Root Mean Squared Error (RMSE) on test data = $rmse")
 }
