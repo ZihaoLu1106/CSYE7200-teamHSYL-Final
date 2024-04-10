@@ -49,4 +49,4 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
 }
 
-case class CSVRow(Age: Int, BMI_Category: Int, Blood_Pressure: Int,Genter:Double,PhysicalActivity_Level:Double,Quality_Of_Sleep:Int,Sleep_Duaration:Double,Stress_Level:Int,ID:String)
+case class CSVRow(Age: Int, BMI_Category: Int, Blood_Pressure: Int,Gender:Double,PhysicalActivity_Level:Double,Quality_Of_Sleep:Int,Sleep_Duaration:Double,Stress_Level:Int,ID:String)
