@@ -40,18 +40,21 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.about(data)) // Renders the about view
   }
   def processInputs() = Action { implicit request: Request[AnyContent] =>
-    val formData = request.body.asFormUrlEncoded
-    val input1Option = formData.flatMap(_.get("input1").flatMap(_.headOption))
-    val input2Option = formData.flatMap(_.get("input2").flatMap(_.headOption))
-    val input3Option = formData.flatMap(_.get("input3").flatMap(_.headOption))
     println("nmd")
-    (input1Option, input2Option, input3Option) match {
-      case (Some(input1), Some(input2), Some(input3)) =>
-        println(s"Input 1: $input1, Input 2: $input2, Input 3: $input3")
-        Ok(views.html.processInputs(input1, input2, input3))
-      case _ =>
-        BadRequest("Missing input values")
-    }
+    val input1Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
+    val input2Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
+    val input3Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
+
+    println(s"Input 1: $input1Option, Input 2: $input2Option, Input 3: $input3Option")
+    println("nmd")
+
+    Redirect(routes.HomeController.displayOutput(input1Option,input2Option,input3Option))
+
+
+  }
+  def displayOutput(input1Option:String,input2Option:String,input3Option:String) = Action { implicit request: Request[AnyContent] =>
+    println("nmd")
+    Ok(views.html.output(input1Option,input2Option,input3Option))
   }
 }
 
