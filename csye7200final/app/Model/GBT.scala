@@ -7,7 +7,7 @@ import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.regression.GBTRegressor
 
 object GBT {
-  def main(args: Array[String]): Unit = {
+  def processModel(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
       .master("local[1]")
       .appName("GBT_train")
@@ -61,7 +61,7 @@ object GBT {
     val correctPredictions = thresholdedPredictions.filter((col("BMI_predictions") === col("BMI")))
     val accuracy = correctPredictions.count().toDouble / thresholdedPredictions.count()
     println(s"Accuracy: $accuracy")
-    model.save("app/gbtModelForBMI")
+    //model.save("app/gbtModelForBMI")
 
     //gbt model for BP
     val gbt1 = new GBTRegressor()
@@ -69,8 +69,14 @@ object GBT {
       .setFeaturesCol("features")
       .setMaxIter(30)
     val model1 = gbt1.fit(df1)
-    val predictionsBP = model.transform(df1)
-    model1.save("app/gbtModelForBP")
+    val predictionsBP = model1.transform(df1)
+    val inputData = List((args(0).toInt, args(1).toInt, args(2).toDouble, args(3).toInt, args(4).toDouble, args(5).toDouble))
+    val inputDF = spark.createDataFrame(inputData).toDF("Age", "Gender", "Exercise", "Quality", "Duration", "Stress")
+    val df2 = assembler.transform(inputDF)
+    val predictions = model1.transform(df2)
+    val predictedClass = predictions.select("prediction").head.getDouble(0)
+    println(predictedClass)
+    //model1.save("app/gbtModelForBP")
     spark.stop()
   }
 }
