@@ -61,7 +61,7 @@ object GBT {
     val correctPredictions = thresholdedPredictions.filter((col("BMI_predictions") === col("BMI")))
     val accuracy = correctPredictions.count().toDouble / thresholdedPredictions.count()
     println(s"Accuracy: $accuracy")
-    model.save("/app/gbtModelForBMI")
+    model.save("app/gbtModelForBMI")
 
     //gbt model for BP
     val gbt1 = new GBTRegressor()
@@ -70,7 +70,7 @@ object GBT {
       .setMaxIter(30)
     val model1 = gbt1.fit(df1)
     val predictionsBP = model.transform(df1)
-    model1.save("/app/gbtModelForBP")
+    model1.save("app/gbtModelForBP")
     spark.stop()
   }
 }

@@ -1,11 +1,18 @@
 package controllers
 
 import Model.MongoDBDF
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
 
 import javax.inject._
 import play.api._
 import play.api.mvc._
+
 import scala.io.Source
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.classification.GBTClassificationModel
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -41,20 +48,52 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   }
   def processInputs() = Action { implicit request: Request[AnyContent] =>
     println("nmd")
-    val input1Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
-    val input2Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
-    val input3Option = request.body.asFormUrlEncoded.get("input1").headOption.getOrElse("Anonymous")
+    val age = request.body.asFormUrlEncoded.get("age").headOption.getOrElse("Anonymous")
+    val gender = request.body.asFormUrlEncoded.get("gender").headOption.getOrElse("Anonymous")
+    val exercise = request.body.asFormUrlEncoded.get("exercise").headOption.getOrElse("Anonymous")
+    val quality = request.body.asFormUrlEncoded.get("qualityOfSleep").headOption.getOrElse("Anonymous")
+    val duration = request.body.asFormUrlEncoded.get("sleepDuration").headOption.getOrElse("Anonymous")
+    val stress = request.body.asFormUrlEncoded.get("stressLevel").headOption.getOrElse("Anonymous")
 
-    println(s"Input 1: $input1Option, Input 2: $input2Option, Input 3: $input3Option")
     println("nmd")
 
-    Redirect(routes.HomeController.displayOutput(input1Option,input2Option,input3Option))
+
+
+
+    Redirect(routes.HomeController.displayOutput(age,gender,exercise,quality,duration,stress))
 
 
   }
-  def displayOutput(input1Option:String,input2Option:String,input3Option:String) = Action { implicit request: Request[AnyContent] =>
+  def displayOutput(ageD:String,genderD:String,exerciseD:String,qualityD:String,durationD:String,stressD:String) = Action { implicit request: Request[AnyContent] =>
     println("nmd")
-    Ok(views.html.output(input1Option,input2Option,input3Option))
+
+    val spark = SparkSession.builder()
+      .appName("YourAppName")
+      .config("spark.master", "local") // Set Spark master
+      .getOrCreate()
+    val age=ageD.toInt
+    val gender=genderD.toInt
+    val exercise=exerciseD.toDouble
+    val quality=qualityD.toInt
+    val duration=durationD.toDouble
+    val stress=stressD.toInt
+    println("xxx")
+
+    val modelBP=GBTClassificationModel.load("app/gbtModelForBP")
+    println("yyy")
+
+    val inputData = Seq((age, gender, exercise, quality, duration, stress))
+    val inputDF = spark.createDataFrame(inputData).toDF("age", "gender", "exercise", "quality", "duration", "stress")
+
+    // Make predictions
+    val predictions = modelBP.transform(inputDF)
+
+    // Extract the prediction result
+    val predictedClass = predictions.select("prediction").head.getDouble(0)
+
+    println(predictedClass)
+
+    Ok(views.html.output(age,gender,exercise,quality,duration,stress))
   }
 }
 
