@@ -7,7 +7,8 @@ import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.regression.GBTRegressor
 
 object GBT {
-  def processModel(args: Array[String]): Unit = {
+  def processModel(args: Array[String]): Double = {
+
     val spark = SparkSession.builder()
       .master("local[1]")
       .appName("GBT_train")
@@ -57,7 +58,7 @@ object GBT {
         .when(abs(col("prediction") - 2) < 0.1, 2)
         .otherwise(col("prediction")))
 
-    thresholdedPredictions.select("BMI_predictions","BMI").show(5)
+    thresholdedPredictions.select("BMI_predictions", "BMI").show(5)
     val correctPredictions = thresholdedPredictions.filter((col("BMI_predictions") === col("BMI")))
     val accuracy = correctPredictions.count().toDouble / thresholdedPredictions.count()
     println(s"Accuracy: $accuracy")
@@ -78,5 +79,8 @@ object GBT {
     println(predictedClass)
     //model1.save("app/gbtModelForBP")
     spark.stop()
+    predictedClass
   }
+
+
 }

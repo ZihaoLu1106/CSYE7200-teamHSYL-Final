@@ -16,6 +16,8 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "3.2.4" exclude ("or
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.2.4" //% "runtime"
 libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0"
 libraryDependencies += "org.mongodb.spark" %% "mongo-spark-connector" % "10.2.2"
+libraryDependencies += "org.apache.hadoop" % "hadoop-common" % "3.4.0"
+
 
 dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
 

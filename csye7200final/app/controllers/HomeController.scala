@@ -1,6 +1,6 @@
 package controllers
 
-import Model.MongoDBDF
+import Model.{GBT, MongoDBDF}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.SparkSession
@@ -12,8 +12,7 @@ import play.api.mvc._
 
 import scala.io.Source
 import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.ml.classification.GBTClassificationModel
-
+import org.apache.spark.ml.regression.GBTRegressionModel
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -64,36 +63,23 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
 
   }
-  def displayOutput(ageD:String,genderD:String,exerciseD:String,qualityD:String,durationD:String,stressD:String) = Action { implicit request: Request[AnyContent] =>
+  def displayOutput(age:String,gender:String,exercise:String,quality:String,duration:String,stress:String) = Action { implicit request: Request[AnyContent] =>
     println("nmd")
 
     val spark = SparkSession.builder()
       .appName("YourAppName")
       .config("spark.master", "local") // Set Spark master
       .getOrCreate()
-    val age=ageD.toInt
-    val gender=genderD.toInt
-    val exercise=exerciseD.toDouble
-    val quality=qualityD.toInt
-    val duration=durationD.toDouble
-    val stress=stressD.toInt
-    println("xxx")
 
-    val modelBP=GBTClassificationModel.load("app/gbtModelForBP")
-    println("yyy")
+    val array= Array(age,gender,exercise,quality,duration,stress)
 
-    val inputData = Seq((age, gender, exercise, quality, duration, stress))
-    val inputDF = spark.createDataFrame(inputData).toDF("age", "gender", "exercise", "quality", "duration", "stress")
 
-    // Make predictions
-    val predictions = modelBP.transform(inputDF)
+    val result=GBT.processModel(array)
+    println(result)
 
-    // Extract the prediction result
-    val predictedClass = predictions.select("prediction").head.getDouble(0)
+    
 
-    println(predictedClass)
-
-    Ok(views.html.output(age,gender,exercise,quality,duration,stress))
+    Ok(views.html.output(result))
   }
 }
 
