@@ -1,6 +1,67 @@
 @()
 
 @main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
-  <a href="@routes.HomeController.about()" class="btn btn-primary">Go to About Page</a>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .topnav a.active {
+      background-color: #21378E;
+      color: white;
+    }
+    .button {
+  background-color: #21378E; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+   margin: 30px;
+    }
+    h1{
+     margin-left: 30px;
+    }
+    p{
+     margin-left: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topnav">
+  <a class="active">CSYE7200</a>
+</div>
+
+
+<h1 >Sleep,<br/>And Health</h1>
+<p>Explore the link between sleep conditions and health<br/>
+  with our interactive platform. Get insights and predictions<br/>
+  on how sleep duration, quality, and stress levels<br/>
+  affect metrics like blood pressure and BMI.</p>
+  <a href="@routes.HomeController.about()" class="button">Go to Test Page</a>
 }
