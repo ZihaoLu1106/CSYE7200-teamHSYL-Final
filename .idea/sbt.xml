@@ -3,6 +3,6 @@
   <component name="ScalaSbtSettings">
     <option name="customLauncherPath" />
     <option name="customVMEnabled" value="true" />
-    <option name="customVMPath" value="$USER_HOME$/Library/Java/JavaVirtualMachines/corretto-11.0.22-1/Contents/Home" />
+    <option name="customVMPath" value="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home" />
   </component>
 </project>

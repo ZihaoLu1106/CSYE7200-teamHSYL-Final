@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="corretto-11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="scala-sdk-2.13.7" level="application" />
+    <orderEntry type="library" name="scala-sdk-2.13.7" level="application" />
+    <orderEntry type="library" exported="" name="scala-sdk-2.13.13" level="application" />
   </component>
 </module>
