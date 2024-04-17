@@ -66,15 +66,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def displayOutput(age:String,gender:String,exercise:String,quality:String,duration:String,stress:String) = Action { implicit request: Request[AnyContent] =>
     println("nmd")
 
-    val spark = SparkSession.builder()
-      .appName("YourAppName")
-      .config("spark.master", "local") // Set Spark master
-      .getOrCreate()
-
     val array= Array(age,gender,exercise,quality,duration,stress)
 
 
     val result=GBT.processModel(array)
+
+    //val arrayresult:Array[Double]=Array(result,0.0)
     println(result)
 
     

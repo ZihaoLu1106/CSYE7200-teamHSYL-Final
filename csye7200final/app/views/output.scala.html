@@ -1,4 +1,4 @@
-@(result:Double)
+@(result:Array[Double])
 
 @main("Output") {
 <style>
@@ -37,7 +37,8 @@
 <div class="topnav">
     <a class="active">CSYE7200</a>
 </div>
-<h1>Here is your healthy degree, @result</h1>
+<h1>Here is your blood pressure degree, @result(0)</h1>
+<h1>Here is your BMI degree, @result(1)</h1>
 
 
 }
