@@ -8,7 +8,7 @@ import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.regression.GBTRegressor
 
 object GBT {
-    def processModel(args: Array[String]): Double = {
+    def processModel(args: Array[String]): Array[Double] = {
 
         val spark = SparkSession.builder()
             .master("local[1]")
@@ -54,6 +54,9 @@ object GBT {
         //gbt model for BMI
         val model = gbt.fit(df1)
         val predictionsBMI = model.transform(df1)
+        val inputData = List((args(0).toInt, args(1).toInt, args(2).toDouble, args(3).toInt, args(4).toDouble, args(5).toDouble))
+        val inputDF = spark.createDataFrame(inputData).toDF("Age", "Gender", "Exercise", "Quality", "Duration", "Stress")
+
         val thresholdedPredictions = predictionsBMI.withColumn("BMI_predictions",
             when(abs(col("prediction") - 0) < 0.1, 0).when(abs(col("prediction") - 1) < 0.1, 1)
                 .when(abs(col("prediction") - 2) < 0.1, 2)
@@ -72,15 +75,16 @@ object GBT {
             .setMaxIter(30)
         val model1 = gbt1.fit(df1)
         val predictionsBP = model1.transform(df1)
-        val inputData = List((args(0).toInt, args(1).toInt, args(2).toDouble, args(3).toInt, args(4).toDouble, args(5).toDouble))
-        val inputDF = spark.createDataFrame(inputData).toDF("Age", "Gender", "Exercise", "Quality", "Duration", "Stress")
         val df2 = assembler.transform(inputDF)
         val predictions = model1.transform(df2)
-        val predictedClass = predictions.select("prediction").head.getDouble(0)
+        val predictions1 = model.transform(df2)
+        val predictedClass = predictions.select("prediction").head.getDouble(0) // get BP
+        val predictedClass1 = predictions1.select("prediction").head.getDouble(0) //get BMI
         println(predictedClass)
+        println(predictedClass1)
         //model1.save("app/gbtModelForBP")
         spark.stop()
-        predictedClass
+        Array(predictedClass, predictedClass1)
     }
 
 
