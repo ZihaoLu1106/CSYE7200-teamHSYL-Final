@@ -1,6 +1,7 @@
-# CSYE7200-Final-Project _ Healh and Sleep
-**For the Group Project of CSYE 7200**
+# CSYE7200-Final-Project _Sleep, and Health
+**For the Group Project of CSYE 7200** 
 
+**Team 1** <br/>
 **Authur 1:** Chen Yang (002837912)<br />
 **Authur 2:** Zihao Lu (002642258)<br />
 **Authur 3:** Pei-Han Hsu (002244953)<br />
