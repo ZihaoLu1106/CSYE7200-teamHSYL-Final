@@ -6,6 +6,8 @@
 **Authur 2:** Zihao Lu (002642258)<br />
 **Authur 3:** Pei-Han Hsu (002244953)<br />
 
+Here is our final presentation slide link for team 1: https://docs.google.com/presentation/d/1S1Hdj6DFZsHaTad7NZDdT-6RjfCLsFXDaBAj_HdfdB0/edit?usp=sharing
+
 # Installation Requirement
 **Java Version**: 11.0.7<br />
 **sbt**: 1.9.8 (should be added into your pc environment)<br />
