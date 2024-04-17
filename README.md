@@ -1,9 +1,9 @@
 # CSYE7200-Final-Project _ Healh and Sleep
 **For the Group Project of CSYE 7200**
 
-**Authur 1:** Chen Yang<br />
-**Authur 2:**   <br />
-**Authur 3:**   <br />
+**Authur 1:** Chen Yang (002837912)<br />
+**Authur 2:** Zihao Lu (002642258)<br />
+**Authur 3:** Pei-Han Hsu (002244953)<br />
 
 # Installation Requirement
 **Java Version**: 11.0.7<br />
