@@ -1,6 +1,6 @@
 package controllers
 
-import Model.{GBT, MongoDBDF}
+import Model.{GBT,Logistic, MongoDBDF}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.SparkSession
@@ -69,7 +69,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     val array= Array(age,gender,exercise,quality,duration,stress)
 
 
-    val result=GBT.processModel(array)
+    val result=Logistic.processModel(array)
 
     //val arrayresult:Array[Double]=Array(result,0.0)
     println(result)
