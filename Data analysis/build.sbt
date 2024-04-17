@@ -10,4 +10,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test
 libraryDependencies += "org.apache.spark" %% "spark-core" % "3.0.1"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.0.1"
 
+libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.8"
+
+
 Test / parallelExecution := false
