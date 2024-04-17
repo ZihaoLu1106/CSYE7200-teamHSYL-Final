@@ -86,6 +86,4 @@ object GBT {
         spark.stop()
         Array(predictedClass, predictedClass1)
     }
-
-
 }
