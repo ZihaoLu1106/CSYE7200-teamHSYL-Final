@@ -40,7 +40,7 @@ Once we analyzing the data and machine learning. <br />
 We export the model and let it have interaction with user interface in play framework in localhost:9000, with the input data that user has, model would tell his/her BMI and Blood Pressure.
 
 # Instruction
-In terms of the how to run the program, we open the terminal and type **sbt run**, once the compilation is done, it would tell you its in localhost:9000 <br />
+In terms of the how to run the program, we open the terminal under and type **sbt run**, once the compilation is done, it would tell you its in localhost:9000 <br />
 
 Open the browser and go to localhost:9000, click the button, user could type in their own data and click the button to continue, it might take while, since it would analyze the data you typed in. <br />
 
