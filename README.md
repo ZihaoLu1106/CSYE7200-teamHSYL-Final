@@ -6,7 +6,9 @@
 **Authur 2:** Zihao Lu (002642258)<br />
 **Authur 3:** Pei-Han Hsu (002244953)<br />
 
-Here is our final presentation slide link for team 1: https://docs.google.com/presentation/d/1S1Hdj6DFZsHaTad7NZDdT-6RjfCLsFXDaBAj_HdfdB0/edit?usp=sharing
+**Final presentation slide link:** https://docs.google.com/presentation/d/1S1Hdj6DFZsHaTad7NZDdT-6RjfCLsFXDaBAj_HdfdB0/edit?usp=sharing  <br />
+**Planning slide link:** https://docs.google.com/presentation/d/1ybOM_H7R_ITxYjDuL4E1OvvS_Rtsov5dIWZ8Xa3GhCg/edit?usp=sharing 
+____
 
 # Installation Requirement
 **Java Version**: 11.0.7<br />
