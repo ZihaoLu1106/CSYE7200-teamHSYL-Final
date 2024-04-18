@@ -44,7 +44,7 @@ In terms of the how to run the program, we open the terminal and type **sbt run*
 
 Open the browser and go to localhost:9000, click the button, user could type in their own data and click the button to continue, it might take while, since it would analyze the data you typed in. <br />
 
-After time waiting, the interface would tell you how is your health. When you go back to the terminal, we could find the accuracy and F-1 measure. <br />
+After time waiting, the interface would tell you how is your health. When you go back to the terminal, we could find the accuracy. <br />
 
 
 
